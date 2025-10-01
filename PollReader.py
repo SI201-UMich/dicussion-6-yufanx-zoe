@@ -90,6 +90,13 @@ class PollReader():
 
 
     def likely_voter_polling_average(self):
+        harris_scores = []
+        trump_scores = []
+        for i, stype in enumerate(self.data_dict['sample type']):
+            if stype == "LV":
+                harris_scores.append(self.data_dict['Harris result'][i])
+                trump_scores.append(self.data_dict['Trump result'][i])
+        return sum(harris_scores)/len(harris_scores), sum(trump_scores)/len(trump_scores)
         """
         Calculate the average polling percentage for each candidate among likely voters.
 
