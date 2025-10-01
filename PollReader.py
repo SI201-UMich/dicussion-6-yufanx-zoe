@@ -60,10 +60,17 @@ class PollReader():
 
             self.data_dict['month'].append(separated[0])
             self.data_dict['date'].append(int(separated[1]))
-            self.data_dict['sample'].append(int(separated[2]))
-            self.data_dict['sample type'].append(separated[3])
-            self.data_dict['Harris result'].append(float(separated[4]))
-            self.data_dict['Trump result'].append(float(separated[5]))
+            sample_and_type = separated[2].split()
+            sample = int(sample_and_type[0])  
+            stype = sample_and_type[1]         
+
+            self.data_dict['sample'].append(sample)
+            self.data_dict['sample type'].append(stype)
+
+            self.data_dict['Harris result'].append(float(separated[3]))
+            self.data_dict['Trump result'].append(float(separated[4]))
+
+        
 
 
     def highest_polling_candidate(self):
@@ -71,11 +78,11 @@ class PollReader():
         max_trump = max(self.data_dict['Trump result'])
 
         if max_harris > max_trump:
-            return f"Harris {max_harris:.1f}%"
+            return f"Harris {max_harris*100:.1f}%"
         elif max_trump > max_harris:
-            return f"Trump {max_trump:.1f}%"
+            return f"Trump {max_trump*100:.1f}%"
         else:
-            return f"EVEN {max_harris:.1f}%"
+            return f"EVEN {max_harris*100:.1f}%"
         """
         This method should iterate through the result columns and return
         the name of the candidate with the highest single polling percentage
@@ -112,14 +119,15 @@ class PollReader():
         trump = self.data_dict['Trump result']
 
     
-        harris_early = sum(harris[:30]) / 30
-        trump_early = sum(trump[:30]) / 30
+        harris_early = sum(harris[-30:]) / 30
+        harris_late = sum(harris[:30]) / 30
 
-    
-        harris_late = sum(harris[-30:]) / 30
-        trump_late = sum(trump[-30:]) / 30
+        trump_early = sum(trump[-30:]) / 30
+        trump_late = sum(trump[:30]) / 30
 
         return (harris_late - harris_early, trump_late - trump_early)
+
+       
         """
         Calculate the change in polling averages between the earliest and latest polls.
 
